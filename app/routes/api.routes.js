@@ -4,6 +4,24 @@ module.exports = (app) => {
 
   var router = require("express").Router();
 
+  app.use(function (req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
+
+  app.get("/hi", (req, res) => res.send("Hello World"));
+
+  app.get("/api/test", controller.allAccess);
+
+  app.post(
+    "/api/2.0/daily_horoscope",
+    [apiAuth.validateApiKey, apiAuth.checkApiValidity],
+    controller.dailyHoroscope
+  );
+
   // Create a new Tutorial
   router.post("/", controller.create);
 
