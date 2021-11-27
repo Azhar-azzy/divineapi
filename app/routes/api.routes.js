@@ -1,6 +1,6 @@
 const { authJwt, apiAuth } = require("../middlewares");
 const controller = require("../controllers/api.controller");
-const { body, validationResult } = require("express-validator");
+//const { body, validationResult } = require("express-validator");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
