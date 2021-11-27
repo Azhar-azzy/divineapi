@@ -17,8 +17,8 @@ module.exports = (app) => {
   //router.get("/api/test", controller.allAccess);
 
   router.post(
-    "/api/2.0/daily_horoscope",
-    [apiAuth.validateApiKey, apiAuth.checkApiValidity],
+    "/2.0/daily_horoscope",
+    [apiAuth.validateApiKey],
     controller.dailyHoroscope
   );
 
