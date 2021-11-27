@@ -11,6 +11,8 @@ module.exports = function (app) {
     next();
   });
 
+  app.get("/hi", (req, res) => res.send("Hello World"));
+
   app.get("/api/test", controller.allAccess);
 
   app.post(
