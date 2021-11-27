@@ -1,9 +1,11 @@
 const { authJwt, apiAuth } = require("../middlewares");
 const controller = require("../controllers/api.controller");
-//const { body, validationResult } = require("express-validator");
+// const { body, validationResult } = require("express-validator");
+
+var router = require("express").Router();
 
 module.exports = function (app) {
-  app.use(function (req, res, next) {
+  router.use(function (req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
@@ -11,13 +13,15 @@ module.exports = function (app) {
     next();
   });
 
-  app.get("/hi", (req, res) => res.send("Hello World"));
+  router.get("/hi", (req, res) => res.send("Hello World"));
 
-  app.get("/api/test", controller.allAccess);
+  router.get("/api/test", controller.allAccess);
 
-  app.post(
+  router.post(
     "/api/2.0/daily_horoscope",
     [apiAuth.validateApiKey, apiAuth.checkApiValidity],
     controller.dailyHoroscope
   );
+
+  app.use("/api", router);
 };
