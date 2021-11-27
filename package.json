@@ -28,7 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.1.0",
     "regex": "^0.1.1",
-    "sequelize": "^5.21.3"
+    "sequelize": "^6.11.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0"
