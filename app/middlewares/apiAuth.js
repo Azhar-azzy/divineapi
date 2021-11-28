@@ -10,18 +10,27 @@ validateApiKey = async (req, res, next) => {
     res.status(400).send({ success: 0, message: "Enter Api key." });
     return;
   }
-
+  var client;
   // check if a client with this api key exists
-  const client = await clients.findOne({
-    where: {
-      api_key,
-      source_url: {
-        [Op.or]: ["localhost", req.hostname],
+  try {
+    client = await clients.findOne({
+      where: {
+        api_key,
+        source_url: {
+          [Op.or]: ["localhost", req.hostname],
+        },
       },
-    },
-    attributes: ["id"],
-    raw: true,
-  });
+      attributes: ["id"],
+      raw: true,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: 0,
+      message: "Some error occured.",
+    });
+    return;
+  }
+
   if (!client) {
     res.status(400).send({
       success: 0,
@@ -36,16 +45,27 @@ validateApiKey = async (req, res, next) => {
   });
   const api = requestSegments[requestSegments.length - 1];
   const api_id = 1;
-  const clientAuth = await clientAuthApi.findOne({
-    where: {
-      client_id: client.id,
-      api_id: {
-        [Op.or]: [6, api_id],
+
+  var clientAuth;
+  try {
+    clientAuth = await clientAuthApi.findOne({
+      where: {
+        client_id: client.id,
+        api_id: {
+          [Op.or]: [6, api_id],
+        },
       },
-    },
-    attributes: ["subscription_end_date"],
-    raw: true,
-  });
+      attributes: ["subscription_end_date"],
+      raw: true,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: 0,
+      message: "Some error occured.",
+    });
+    return;
+  }
+
   if (!clientAuth) {
     res.status(400).send({
       success: 0,
