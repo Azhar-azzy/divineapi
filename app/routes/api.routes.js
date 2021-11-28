@@ -19,7 +19,8 @@ module.exports = function (app) {
 
   router.post(
     "/api/2.0/daily_horoscope",
-    [apiAuth.validateApiKey, apiAuth.checkApiValidity],
+    apiAuth.validateApiKey,
+    // [apiAuth.validateApiKey, apiAuth.checkApiValidity],
     controller.dailyHoroscope
   );
 
