@@ -90,7 +90,8 @@ function validateApiKey(api_id) {
   };
 }
 
-alidateApiKey = async (req, res, next) => {
+// Old Function without arguments
+_validateApiKey = async (req, res, next) => {
   // check if api key exists
   const { api_key } = req.body;
   if (!api_key) {
