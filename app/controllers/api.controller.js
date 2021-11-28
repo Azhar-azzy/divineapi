@@ -9,7 +9,7 @@ function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-exports.dailyHoroscope = (req, res) => {
+exports.dailyHoroscope = async (req, res) => {
   if (!req.body.sign) {
     res.status(400).send({ success: 0, message: "Enter zodiac sign." });
     return;
@@ -27,7 +27,7 @@ exports.dailyHoroscope = (req, res) => {
     var diff = parseInt(
       (yourDate - new Date(req.body.date)) / (1000 * 60 * 60 * 24)
     );
-    if (diff > 2) {
+    if (diff > 2 && false) {
       res.status(400).send({
         success: 0,
         message: "You can only access yesterday, today and tomorrow data.",
@@ -35,9 +35,9 @@ exports.dailyHoroscope = (req, res) => {
       return;
     }
   }
-
-  dailyHoroscope
-    .findAll({
+  var data;
+  try {
+    data = await dailyHoroscope.findAll({
       where: { sign: req.body.sign, h_date: req.body.date },
       attributes: [
         "sign",
@@ -48,24 +48,24 @@ exports.dailyHoroscope = (req, res) => {
         "travel",
         "luck",
       ],
-    })
-    .then((data) => {
-      if (isEmpty(data)) res.send({ success: 0, message: "No data found!!!" });
-      else {
-        var result = {};
-        result.success = 1;
-        result.msg = "Daily horoscope result.";
-        data[0].luck = JSON.parse(data[0].luck);
-        result.data = data[0];
-        res.status(200).send(result);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials.",
-      });
     });
+  } catch (error) {
+    res.status(500).send({
+      success: 0,
+      message: "Some error occurred.",
+    });
+  }
+
+  if (isEmpty(data))
+    res.status(400).send({ success: 0, message: "No data found!!!" });
+  else {
+    var result = {};
+    result.success = 1;
+    result.msg = "Daily horoscope result.";
+    data[0].luck = JSON.parse(data[0].luck);
+    result.data = data[0];
+    res.status(200).send(result);
+  }
 };
 
 // Create and Save a new Tutorial
