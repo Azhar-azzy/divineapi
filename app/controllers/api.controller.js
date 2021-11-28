@@ -27,7 +27,7 @@ exports.dailyHoroscope = (req, res) => {
     var diff = parseInt(
       (yourDate - new Date(req.body.date)) / (1000 * 60 * 60 * 24)
     );
-    if (false) {
+    if (diff > 2) {
       res.status(400).send({
         success: 0,
         message: "You can only access yesterday, today and tomorrow data.",
